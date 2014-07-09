@@ -45,6 +45,8 @@ private:
 		uint32 m_hash;
 		CIwSoundData* m_data;
 		CIwSoundSpec* m_specification;
+
+		DISABLE_COPY(Effect);
 	};
 
 	typedef std::list<Effect*> EffectList;
@@ -72,6 +74,8 @@ private:
 
 private:
 	EffectList m_effects;
+
+	DISABLE_COPY(AudioManager);
 };
 
 #endif

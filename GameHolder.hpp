@@ -1,6 +1,7 @@
 #ifndef GAMEHOLDER_HPP
 #define GAMEHOLDER_HPP
 
+#include "Core.hpp"
 #include "Error.hpp"
 
 class GameRunner;
@@ -27,6 +28,9 @@ private:
 
 private:
 	static T* instance;
+
+	DISABLE_COPY(GameHolder);
+	DISABLE_CREATE(GameHolder);
 
 	friend class GameRunner;
 };

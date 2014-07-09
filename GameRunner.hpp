@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "Core.hpp"
 #include "Error.hpp"
 #include "GameHolder.hpp"
 
@@ -30,6 +31,9 @@ private:
 	static void Terminate();
 
 	static void HandleError(const std::string& error);
+
+	DISABLE_COPY(GameRunner);
+	DISABLE_CREATE(GameRunner);
 };
 
 #endif

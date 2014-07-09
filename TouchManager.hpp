@@ -91,6 +91,8 @@ private:
 
 private:
 	ListenerVector m_listeners;
+
+	DISABLE_COPY(TouchManager);
 };
 
 #endif

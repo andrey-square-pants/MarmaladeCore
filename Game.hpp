@@ -2,10 +2,9 @@
 #define GAME_HPP
 
 #include "Core.hpp"
+#include "GameRunner.hpp"
 #include "TouchManager.hpp"
 #include "AudioManager.hpp"
-
-class GameRunner;
 
 class Game : public IRenderable, public IUpdateable,
 	public ITouchListener, public IAudio {
@@ -33,7 +32,24 @@ private:
 	TouchManager m_touchManager;
 	AudioManager m_audioManager;
 
+	DISABLE_COPY(Game);
+
 	friend class GameRunner;
 };
+
+#define DECLARE_GAME(ClassName)        \
+protected:                             \
+    ClassName();                       \
+    virtual ~ClassName();              \
+                                       \
+    DISABLE_COPY(ClassName);           \
+                                       \
+    friend class GameHolder<ClassName>
+
+#define CONTRUCT_GAME(ClassName) \
+    ClassName::ClassName()
+
+#define DESTRUCT_GAME(ClassName) \
+    ClassName::~ClassName()
 
 #endif
