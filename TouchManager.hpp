@@ -5,18 +5,17 @@
 #include <functional>
 
 #include "s3ePointer.h"
+#include "IwGeomVec2.h"
 
 #include "Core.hpp"
 
 struct Touch {
-	int32 x;
-	int32 y;
 	uint32 id;
+	CIwVec2 point;
 
 	Touch(int32 x_, int32 y_, uint32 id_ = 0)
-		: x(x_)
-		, y(y_)
-		, id(id_) {
+		: id(id_)
+		, point(x_, y_) {
 	}
 };
 
@@ -63,9 +62,9 @@ private:
 
 	class NotifyListener : public std::unary_function<ITouchListener*, void> {
 	public:
-		NotifyListener(Event::E event, const Touch& touch)
-			: m_event(event)
-			, m_touch(touch) {
+		NotifyListener(const Touch& touch, Event::E event)
+			: m_touch(touch)
+			, m_event(event) {
 		}
 
 		void operator()(ITouchListener* listener) const {
@@ -85,8 +84,8 @@ private:
 		}
 
 	private:
-		Event::E m_event;
 		Touch m_touch;
+		Event::E m_event;
 	};
 
 private:

@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
 #include "Iw2D.h"
+#include "IwGx.h"
 
 Game::Game() {
 	m_touchManager.AddListener(*this);
@@ -58,4 +59,20 @@ void Game::PlayMusic(const std::string& file, bool repeat) {
 
 void Game::StopMusic() {
 	m_audioManager.StopMusic();
+}
+
+float Game::GetScreenWidth() const {
+	return IwGxGetScreenWidth();
+}
+
+float Game::GetScreenHeight() const {
+	return IwGxGetScreenHeight();
+}
+
+CIwFVec2 Game::GetScreenSize() const {
+	return CIwFVec2(GetScreenWidth(), GetScreenHeight());
+}
+
+CIwFVec2 Game::GetScreenCenter() const {
+	return 0.5f*GetScreenSize();
 }

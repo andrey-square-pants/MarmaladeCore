@@ -69,15 +69,15 @@ void TouchManager::MultiTouchMotionCallback(s3ePointerTouchMotionEvent* event, v
 
 void TouchManager::TouchBegin(const Touch& touch) {
 	std::for_each(m_listeners.begin(), m_listeners.end(),
-		NotifyListener(Event::Begin, touch));
+		NotifyListener(touch, Event::Begin));
 }
 
 void TouchManager::TouchMove(const Touch& touch) {
 	std::for_each(m_listeners.begin(), m_listeners.end(),
-		NotifyListener(Event::Move, touch));
+		NotifyListener(touch, Event::Move));
 }
 
 void TouchManager::TouchEnd(const Touch& touch) {
 	std::for_each(m_listeners.begin(), m_listeners.end(),
-		NotifyListener(Event::End, touch));
+		NotifyListener(touch, Event::End));
 }

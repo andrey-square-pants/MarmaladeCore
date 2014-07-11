@@ -25,6 +25,11 @@ public:
 	virtual void PlayMusic(const std::string& file, bool repeat);
 	virtual void StopMusic();
 
+	float GetScreenWidth() const;
+	float GetScreenHeight() const;
+	CIwFVec2 GetScreenSize() const;
+	CIwFVec2 GetScreenCenter() const;
+
 private:
 	void Run();
 
@@ -37,13 +42,13 @@ private:
 	friend class GameRunner;
 };
 
-#define DECLARE_GAME(ClassName)        \
-protected:                             \
-    ClassName();                       \
-    virtual ~ClassName();              \
-                                       \
-    DISABLE_COPY(ClassName);           \
-                                       \
+#define DECLARE_GAME(ClassName)                      \
+protected:                                           \
+    ClassName();                                     \
+    virtual ~ClassName();                            \
+                                                     \
+    DISABLE_COPY(ClassName);                         \
+                                                     \
     friend class GameHolder<ClassName>
 
 #define CONTRUCT_GAME(ClassName) \
