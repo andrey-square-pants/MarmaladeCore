@@ -13,20 +13,13 @@ public:
 	Label(const std::string& file);
 	virtual ~Label();
 
+	bool IsEmpty() const;
+
 	std::string GetText() const;
 	void SetText(const std::string& text);
 
-	CIw2DFontAlign GetHorizontalAlign() const;
-	void SetHorizontalAlign(CIw2DFontAlign horizontal);
-
-	CIw2DFontAlign GetVerticalAlign() const;
-	void SetVerticalAlign(CIw2DFontAlign vertical);
-
-	void SetCenterAlign();
-
 protected:
 	CLabel m_label;
-	CIw2DFont* m_font;
 };
 
 #endif

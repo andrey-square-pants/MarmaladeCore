@@ -9,7 +9,9 @@ Visual::~Visual() {
 }
 
 void Visual::Render() {
-	m_visual.Render();
+	if (IsVisible()) {
+		m_visual.Render();
+	}
 }
 
 void Visual::Update(float delta) {
@@ -54,25 +56,12 @@ float Visual::GetWidth() const {
 	return m_visual.m_W;
 }
 
-void Visual::SetWidth(float width) {
-	m_visual.m_W = width;
-}
-
 float Visual::GetHeight() const {
 	return m_visual.m_H;
 }
 
-void Visual::SetHeight(float height) {
-	m_visual.m_H = height;
-}
-
 CIwFVec2 Visual::GetSize() const {
 	return CIwFVec2(GetWidth(), GetHeight());
-}
-
-void Visual::SetSize(const CIwFVec2& size) {
-	SetWidth(size.x);
-	SetHeight(size.y);
 }
 
 float Visual::GetOriginX() const {

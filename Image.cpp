@@ -11,11 +11,10 @@ CIw2DImage* Image::LoadImage(const std::string& file) {
 }
 
 Image::Image(const std::string& file)
-	: Visual(m_sprite)
-	, m_image(LoadImage(file)) {
-	m_sprite.SetImage(m_image);
+	: Visual(m_sprite) {
+	m_sprite.SetImage(LoadImage(file));
 }
 
 Image::~Image() {
-	delete m_image;
+	delete m_sprite.GetImage();
 }

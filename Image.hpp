@@ -15,7 +15,6 @@ public:
 
 protected:
 	CSprite m_sprite;
-	CIw2DImage* m_image;
 };
 
 #endif

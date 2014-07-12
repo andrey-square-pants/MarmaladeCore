@@ -20,13 +20,8 @@ public:
 	virtual void SetPosition(const CIwFVec2& position) = 0;
 
 	virtual float GetWidth() const = 0;
-	virtual void SetWidth(float width) = 0;
-
 	virtual float GetHeight() const = 0;
-	virtual void SetHeight(float height) = 0;
-
 	virtual CIwFVec2 GetSize() const = 0;
-	virtual void SetSize(const CIwFVec2& size) = 0;
 
 	virtual float GetOriginX() const = 0;
 	virtual void SetOriginX(float originX) = 0;
@@ -94,13 +89,8 @@ public:
 	virtual void SetPosition(const CIwFVec2& position);
 
 	virtual float GetWidth() const;
-	virtual void SetWidth(float width);
-
 	virtual float GetHeight() const;
-	virtual void SetHeight(float height);
-
 	virtual CIwFVec2 GetSize() const;
-	virtual void SetSize(const CIwFVec2& size);
 
 	virtual float GetOriginX() const;
 	virtual void SetOriginX(float originX);

@@ -11,13 +11,17 @@ CIw2DFont* Label::LoadFont(const std::string& file) {
 }
 
 Label::Label(const std::string& file)
-	: Visual(m_label)
-	, m_font(LoadFont(file)) {
-	m_label.SetFont(m_font);
+	: Visual(m_label) {
+	m_label.SetFont(LoadFont(file));
+	m_label.m_H = static_cast<float>(m_label.m_Font->GetHeight());
 }
 
 Label::~Label() {
-	delete m_font;
+	delete m_label.m_Font;
+}
+
+bool Label::IsEmpty() const {
+	return m_label.m_Text.empty();
 }
 
 std::string Label::GetText() const {
@@ -26,25 +30,15 @@ std::string Label::GetText() const {
 
 void Label::SetText(const std::string& text) {
 	m_label.m_Text = text;
-}
 
-CIw2DFontAlign Label::GetHorizontalAlign() const {
-	return m_label.m_AlignHor;
-}
+	if (!text.empty()) {
+		CIw2DFont* oldFont = Iw2DGetFont();
 
-void Label::SetHorizontalAlign(CIw2DFontAlign horizontal) {
-	m_label.m_AlignHor = horizontal;
-}
+		Iw2DSetFont(m_label.m_Font);
+		m_label.m_W = static_cast<float>(Iw2DGetStringWidth(text.c_str()));
 
-CIw2DFontAlign Label::GetVerticalAlign() const {
-	return m_label.m_AlignVer;
-}
-
-void Label::SetVerticalAlign(CIw2DFontAlign vertical) {
-	m_label.m_AlignVer = vertical;
-}
-
-void Label::SetCenterAlign() {
-	SetHorizontalAlign(IW_2D_FONT_ALIGN_CENTRE);
-	SetVerticalAlign(IW_2D_FONT_ALIGN_CENTRE);
+		Iw2DSetFont(oldFont);
+	} else {
+		m_label.m_W = 0.0f;
+	}
 }
