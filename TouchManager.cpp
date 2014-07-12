@@ -42,29 +42,29 @@ void TouchManager::RemoveListener(ITouchListener& listener) {
 void TouchManager::TouchCallback(s3ePointerEvent* event, void* data) {
 	TouchManager* tthis = static_cast<TouchManager*>(data);
 	if (event->m_Pressed) {
-		tthis->TouchBegin(Touch(event->m_x, event->m_y));
+		tthis->TouchBegin(Touch(CIwVec2(event->m_x, event->m_y)));
 	} else {
-		tthis->TouchEnd(Touch(event->m_x, event->m_y));
+		tthis->TouchEnd(Touch(CIwVec2(event->m_x, event->m_y)));
 	}
 }
 
 void TouchManager::TouchMotionCallback(s3ePointerMotionEvent* event, void* data) {
 	TouchManager* tthis = static_cast<TouchManager*>(data);
-	tthis->TouchMove(Touch(event->m_x, event->m_y));
+	tthis->TouchMove(Touch(CIwVec2(event->m_x, event->m_y)));
 }
 
 void TouchManager::MultiTouchCallback(s3ePointerTouchEvent* event, void* data) {
 	TouchManager* tthis = static_cast<TouchManager*>(data);
 	if (event->m_Pressed) {
-		tthis->TouchBegin(Touch(event->m_x, event->m_y, event->m_TouchID));
+		tthis->TouchBegin(Touch(CIwVec2(event->m_x, event->m_y), event->m_TouchID));
 	} else {
-		tthis->TouchEnd(Touch(event->m_x, event->m_y, event->m_TouchID));
+		tthis->TouchEnd(Touch(CIwVec2(event->m_x, event->m_y), event->m_TouchID));
 	}
 }
 
 void TouchManager::MultiTouchMotionCallback(s3ePointerTouchMotionEvent* event, void* data) {
 	TouchManager* tthis = static_cast<TouchManager*>(data);
-	tthis->TouchMove(Touch(event->m_x, event->m_y, event->m_TouchID));
+	tthis->TouchMove(Touch(CIwVec2(event->m_x, event->m_y), event->m_TouchID));
 }
 
 void TouchManager::TouchBegin(const Touch& touch) {

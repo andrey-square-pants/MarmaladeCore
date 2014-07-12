@@ -10,21 +10,19 @@ private:
 	static CIw2DFont* LoadFont(const std::string& file);
 
 public:
-	Label(const std::string& file = "");
+	Label(const std::string& file);
 	virtual ~Label();
 
 	std::string GetText() const;
-	Label& SetText(const std::string& text);
+	void SetText(const std::string& text);
 
 	CIw2DFontAlign GetHorizontalAlign() const;
-	Label& SetHorizontalAlign(CIw2DFontAlign horizontal);
+	void SetHorizontalAlign(CIw2DFontAlign horizontal);
 
 	CIw2DFontAlign GetVerticalAlign() const;
-	Label& SetVerticalAlign(CIw2DFontAlign vertical);
+	void SetVerticalAlign(CIw2DFontAlign vertical);
 
-	Label& SetAlign(CIw2DFontAlign horizontal, CIw2DFontAlign vertical);
-
-	Label& CenterAlign();
+	void SetCenterAlign();
 
 protected:
 	CLabel m_label;

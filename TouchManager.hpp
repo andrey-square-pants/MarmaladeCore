@@ -10,12 +10,12 @@
 #include "Core.hpp"
 
 struct Touch {
-	uint32 id;
 	CIwVec2 point;
+	uint32 id;
 
-	Touch(int32 x_, int32 y_, uint32 id_ = 0)
-		: id(id_)
-		, point(x_, y_) {
+	Touch(const CIwVec2& point_, uint32 id_ = 0)
+		: point(point_)
+		, id(id_) {
 	}
 };
 
