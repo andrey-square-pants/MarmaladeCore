@@ -62,11 +62,11 @@ void Game::StopMusic() {
 }
 
 float Game::GetScreenWidth() const {
-	return IwGxGetScreenWidth();
+	return static_cast<float>(IwGxGetScreenWidth());
 }
 
 float Game::GetScreenHeight() const {
-	return IwGxGetScreenHeight();
+	return static_cast<float>(IwGxGetScreenHeight());
 }
 
 CIwFVec2 Game::GetScreenSize() const {

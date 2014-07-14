@@ -46,7 +46,7 @@ private:
 	DECLARE_GAME(FirstGame);
 };
 
-CONTRUCT_GAME(FirstGame)
+CONSTRUCT_GAME(FirstGame)
 	: m_label("fonts/arial8.gxfont")
 	, m_image("textures/gem1.png")
 	, m_frameImage("textures/gem2.png", 2) {

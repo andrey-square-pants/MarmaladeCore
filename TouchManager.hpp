@@ -1,6 +1,7 @@
 #ifndef TOUCHMANAGER_HPP
 #define TOUCHMANAGER_HPP
 
+#include <map>
 #include <vector>
 #include <functional>
 
@@ -50,6 +51,7 @@ private:
 	void TouchEnd(const Touch& touch);
 
 private:
+	typedef std::map<uint32, Touch> TouchMap;
 	typedef std::vector<ITouchListener*> ListenerVector;
 
 	struct Event {
@@ -88,7 +90,14 @@ private:
 		Event::E m_event;
 	};
 
+	void NotifyBegin(const Touch& touch);
+	void NotifyMove(TouchMap::iterator it, const Touch& touch);
+	void NotifyEnd(TouchMap::iterator it);
+
+	void NotifyEvent(const Touch& touch, Event::E event);
+
 private:
+	TouchMap m_touches;
 	ListenerVector m_listeners;
 
 	DISABLE_COPY(TouchManager);

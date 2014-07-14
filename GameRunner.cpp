@@ -1,7 +1,5 @@
 #include "GameRunner.hpp"
 
-#include <iostream>
-
 #include "Iw2D.h"
 
 void GameRunner::Initialize() {
@@ -19,5 +17,5 @@ void GameRunner::HandleError(const std::string& error) {
 		out += ": " + error;
 	}
 
-	std::cerr << out << std::endl;
+	IwTrace(GAME, (out.c_str()));
 }

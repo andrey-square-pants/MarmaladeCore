@@ -27,7 +27,9 @@ public:
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
+
 	CIwFVec2 GetScreenSize() const;
+
 	CIwFVec2 GetScreenCenter() const;
 
 private:
@@ -51,7 +53,7 @@ protected:                                           \
                                                      \
     friend class GameHolder<ClassName>
 
-#define CONTRUCT_GAME(ClassName) \
+#define CONSTRUCT_GAME(ClassName) \
     ClassName::ClassName()
 
 #define DESTRUCT_GAME(ClassName) \

@@ -68,16 +68,44 @@ void TouchManager::MultiTouchMotionCallback(s3ePointerTouchMotionEvent* event, v
 }
 
 void TouchManager::TouchBegin(const Touch& touch) {
-	std::for_each(m_listeners.begin(), m_listeners.end(),
-		NotifyListener(touch, Event::Begin));
+	TouchMap::iterator found = m_touches.find(touch.id);
+	if (found != m_touches.end()) {
+		NotifyEnd(found);
+	} else {
+		NotifyBegin(touch);
+	}
 }
 
 void TouchManager::TouchMove(const Touch& touch) {
-	std::for_each(m_listeners.begin(), m_listeners.end(),
-		NotifyListener(touch, Event::Move));
+	TouchMap::iterator found = m_touches.find(touch.id);
+	if (found != m_touches.end()) {
+		NotifyMove(found, touch);
+	}
 }
 
 void TouchManager::TouchEnd(const Touch& touch) {
+	TouchMap::iterator found = m_touches.find(touch.id);
+	if (found != m_touches.end()) {
+		NotifyEnd(found);
+	}
+}
+
+void TouchManager::NotifyBegin(const Touch& touch) {
+	NotifyEvent(touch, Event::Begin);
+	m_touches.insert(std::make_pair(touch.id, touch));
+}
+
+void TouchManager::NotifyMove(TouchMap::iterator it, const Touch& touch) {
+	it->second.point = touch.point;
+	NotifyEvent(it->second, Event::Move);
+}
+
+void TouchManager::NotifyEnd(TouchMap::iterator it) {
+	NotifyEvent(it->second, Event::End);
+	m_touches.erase(it);
+}
+
+void TouchManager::NotifyEvent(const Touch& touch, Event::E event) {
 	std::for_each(m_listeners.begin(), m_listeners.end(),
-		NotifyListener(touch, Event::End));
+		NotifyListener(touch, event));
 }
