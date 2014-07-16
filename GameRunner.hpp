@@ -15,7 +15,7 @@ public:
 		GameHolder<T>::CreateInstance();
 
 		try {
-			GameHolder<T>::GetInstance().Run();
+			GameHolder<T>::I().Run();
 		} catch (const Error& error) {
 			HandleError(error.GetMessage());
 		} catch (...) {

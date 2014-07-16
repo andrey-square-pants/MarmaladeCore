@@ -9,7 +9,7 @@ class GameRunner;
 template <typename T>
 class GameHolder {
 public:
-	static T& GetInstance() {
+	static T& I() {
 		if (instance == NULL) {
 			throw Error("Null game holder instance");
 		}

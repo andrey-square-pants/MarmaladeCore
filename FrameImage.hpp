@@ -7,8 +7,8 @@
 
 class FrameImage : public Image {
 public:
-	FrameImage(const std::string& fileImage, uint8 frameCount);
-	FrameImage(uint32 id, const std::string& fileImage, uint8 frameCount);
+	FrameImage(const std::string& name, uint8 count);
+	FrameImage(uint32 id, const std::string& name, uint8 count);
 	virtual ~FrameImage();
 
 	virtual void Render();
@@ -19,7 +19,7 @@ public:
 	void SetCurrentFrame(uint8 number);
 
 private:
-	void Construct(uint8 frameCount);
+	void Construct(uint8 count);
 	void Destruct();
 
 private:

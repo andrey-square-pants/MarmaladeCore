@@ -6,15 +6,18 @@
 #include "AudioHelper.hpp"
 #include "TouchHelper.hpp"
 #include "SceneHelper.hpp"
+#include "ScreenHelper.hpp"
 
 class Game : public IRenderable, public IUpdateable,
-	public ITouchProcessor, public IAudioPlayer, public ISceneManager {
+	public ITouchProcessor, public IAudioPlayer,
+	public ISceneManager, public IScreenData,
+	protected ICreateable {
 protected:
 	Game();
-	virtual ~Game();
+	virtual ~Game() = 0;
 
-	virtual void Create() = 0;
-	virtual void Destroy() = 0;
+	virtual void Create();
+	virtual void Destroy();
 
 public:
 	virtual void Render();
@@ -24,19 +27,20 @@ public:
 	virtual bool ProcessTouchMove(const Touch& touch);
 	virtual bool ProcessTouchEnd(const Touch& touch);
 
-	virtual void PlayEffect(const std::string& file);
+	virtual void PlayEffect(const std::string& name);
 
-	virtual void PlayMusic(const std::string& file, bool repeat);
+	virtual void PlayMusic(const std::string& name, bool repeat);
 	virtual void StopMusic();
 
-	virtual void SwitchToScene(IScene* scene, bool takeOwnership);
+	virtual IScene* GetCurrentScene();
+	virtual void SetCurrentScene(IScene* scene, bool takeOwnership);
 
-	float GetScreenWidth() const;
-	float GetScreenHeight() const;
+	virtual float GetScreenWidth() const;
+	virtual float GetScreenHeight() const;
 
-	CIwFVec2 GetScreenSize() const;
+	virtual CIwFVec2 GetScreenSize() const;
 
-	CIwFVec2 GetScreenCenter() const;
+	virtual CIwFVec2 GetScreenCenter() const;
 
 private:
 	void Run();
@@ -45,19 +49,25 @@ private:
 	AudioHelper m_audioHelper;
 	TouchHelper m_touchHelper;
 	SceneHelper m_sceneHelper;
+	ScreenHelper m_screenHelper;
 
 	DISABLE_COPY(Game);
 
 	friend class GameRunner;
 };
 
-#define DECLARE_GAME(ClassName) \
-protected:                      \
-    ClassName();                \
-    virtual ~ClassName();       \
-                                \
-    DISABLE_COPY(ClassName);    \
-                                \
+#define DECLARE_GAME(ClassName)            \
+public:                                    \
+    static ClassName& I() {                \
+        return GameHolder<ClassName>::I(); \
+    }                                      \
+                                           \
+protected:                                 \
+    ClassName();                           \
+    virtual ~ClassName();                  \
+                                           \
+    DISABLE_COPY(ClassName);               \
+                                           \
     friend class GameHolder<ClassName>
 
 #define IMPLEMENT_GAME(ClassName) \

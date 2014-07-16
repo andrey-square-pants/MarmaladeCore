@@ -68,9 +68,9 @@ public:
 	virtual ~IAudioPlayer() {
 	}
 
-	virtual void PlayEffect(const std::string& fileEffet) = 0;
+	virtual void PlayEffect(const std::string& name) = 0;
 
-	virtual void PlayMusic(const std::string& fileMusic, bool repeat) = 0;
+	virtual void PlayMusic(const std::string& name, bool repeat) = 0;
 	virtual void StopMusic() = 0;
 };
 
@@ -88,6 +88,15 @@ public:
 	}
 
 	virtual void Update(float delta) = 0;
+};
+
+class ICreateable {
+public:
+	virtual ~ICreateable() {
+	}
+
+	virtual void Create() = 0;
+	virtual void Destroy() = 0;
 };
 
 class IVisual : public IRenderable, public IUpdateable,
@@ -166,7 +175,7 @@ public:
 
 	virtual uint32 GetVisualCount() const = 0;
 
-	virtual IVisual* GetVisual(uint32 i) = 0;
+	virtual IVisual* GetVisual(uint32 number) = 0;
 	virtual IVisual* GetVisualById(uint32 id) = 0;
 };
 
@@ -175,7 +184,35 @@ public:
 	virtual ~ISceneManager() {
 	}
 
-	virtual void SwitchToScene(IScene* scene, bool takeOwnership) = 0;
+	virtual IScene* GetCurrentScene() = 0;
+	virtual void SetCurrentScene(IScene* scene, bool takeOwnership) = 0;
+};
+
+class IScreenData {
+public:
+	virtual ~IScreenData() {
+	}
+
+	virtual float GetScreenWidth() const = 0;
+	virtual float GetScreenHeight() const = 0;
+
+	virtual CIwFVec2 GetScreenSize() const = 0;
+
+	virtual CIwFVec2 GetScreenCenter() const = 0;
+};
+
+class ITouchListener {
+public:
+	virtual ~ITouchListener() {
+	}
+
+	virtual void OnTouchCancel(IVisual& visual, const Touch& touch) = 0;
+
+	virtual bool OnTouchBegin(IVisual& visual, const Touch& touch) = 0;
+	virtual bool OnTouchMove(IVisual& visual, const Touch& touch) = 0;
+	virtual bool OnTouchEnd(IVisual& visual, const Touch& touch) = 0;
+
+	virtual bool OnClick(IVisual& visual, const Touch& touch) = 0;
 };
 
 #endif

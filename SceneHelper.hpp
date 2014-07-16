@@ -16,7 +16,8 @@ public:
 	virtual bool ProcessTouchMove(const Touch& touch);
 	virtual bool ProcessTouchEnd(const Touch& touch);
 
-	virtual void SwitchToScene(IScene* scene, bool takeOwnership);
+	virtual IScene* GetCurrentScene();
+	virtual void SetCurrentScene(IScene* scene, bool takeOwnership);
 
 private:
 	void Clear();

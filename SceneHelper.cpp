@@ -41,7 +41,14 @@ bool SceneHelper::ProcessTouchEnd(const Touch& touch) {
 	return (m_scene != NULL ? m_scene->ProcessTouchEnd(touch) : false);
 }
 
-void SceneHelper::SwitchToScene(IScene* scene, bool takeOwnership) {
+IScene* SceneHelper::GetCurrentScene() {
+	if (m_scene == NULL) {
+		throw Error("Null scene pointer");
+	}
+	return m_scene;
+}
+
+void SceneHelper::SetCurrentScene(IScene* scene, bool takeOwnership) {
 	if (scene == NULL) {
 		throw Error("Null scene pointer");
 	}

@@ -7,15 +7,15 @@
 
 class Image : public Visual {
 private:
-	static CIw2DImage* LoadImage(const std::string& fileImage);
+	static CIw2DImage* LoadImage(const std::string& name);
 
 public:
-	Image(const std::string& fileImage);
-	Image(uint32 id, const std::string& fileImage);
+	Image(const std::string& name);
+	Image(uint32 id, const std::string& name);
 	virtual ~Image();
 
 private:
-	void Construct(const std::string& fileImage);
+	void Construct(const std::string& name);
 	void Destruct();
 
 protected:

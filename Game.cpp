@@ -1,13 +1,18 @@
 #include "Game.hpp"
 
 #include "Iw2D.h"
-#include "IwGx.h"
 
 Game::Game() {
-	m_touchHelper.SetTouchProcessor(this);
 }
 
 Game::~Game() {
+}
+
+void Game::Create() {
+	m_touchHelper.SetTouchProcessor(this);
+}
+
+void Game::Destroy() {
 	m_touchHelper.SetTouchProcessor(NULL);
 }
 
@@ -39,7 +44,6 @@ void Game::Update(float delta) {
 
 void Game::Render() {
 	Iw2DSurfaceClear(0xff000000);
-
 	m_sceneHelper.Render();
 }
 
@@ -55,34 +59,38 @@ bool Game::ProcessTouchEnd(const Touch& touch) {
 	return m_sceneHelper.ProcessTouchEnd(touch);
 }
 
-void Game::PlayEffect(const std::string& file) {
-	m_audioHelper.PlayEffect(file);
+void Game::PlayEffect(const std::string& name) {
+	m_audioHelper.PlayEffect(name);
 }
 
-void Game::PlayMusic(const std::string& file, bool repeat) {
-	m_audioHelper.PlayMusic(file, repeat);
+void Game::PlayMusic(const std::string& name, bool repeat) {
+	m_audioHelper.PlayMusic(name, repeat);
 }
 
 void Game::StopMusic() {
 	m_audioHelper.StopMusic();
 }
 
-void Game::SwitchToScene(IScene* scene, bool takeOwnership) {
-	m_sceneHelper.SwitchToScene(scene, takeOwnership);
+IScene* Game::GetCurrentScene() {
+	return m_sceneHelper.GetCurrentScene();
+}
+
+void Game::SetCurrentScene(IScene* scene, bool takeOwnership) {
+	m_sceneHelper.SetCurrentScene(scene, takeOwnership);
 }
 
 float Game::GetScreenWidth() const {
-	return static_cast<float>(IwGxGetScreenWidth());
+	return m_screenHelper.GetScreenWidth();
 }
 
 float Game::GetScreenHeight() const {
-	return static_cast<float>(IwGxGetScreenHeight());
+	return m_screenHelper.GetScreenHeight();
 }
 
 CIwFVec2 Game::GetScreenSize() const {
-	return CIwFVec2(GetScreenWidth(), GetScreenHeight());
+	return m_screenHelper.GetScreenSize();
 }
 
 CIwFVec2 Game::GetScreenCenter() const {
-	return 0.5f*GetScreenSize();
+	return m_screenHelper.GetScreenCenter();
 }

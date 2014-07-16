@@ -16,15 +16,15 @@ public:
 
 	virtual void Update(float delta);
 
-	virtual void PlayEffect(const std::string& fileEffect);
+	virtual void PlayEffect(const std::string& name);
 
-	virtual void PlayMusic(const std::string& fileMusic, bool repeat);
+	virtual void PlayMusic(const std::string& name, bool repeat);
 	virtual void StopMusic();
 
 private:
 	class Effect {
 	public:
-		Effect(const std::string& fileEffect);
+		Effect(const std::string& name);
 		virtual ~Effect();
 
 		void Play();

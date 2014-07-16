@@ -30,18 +30,27 @@ bool Visual::ProcessTouchBegin(const Touch& touch) {
 	if (!IsTouchable()) {
 		return false;
 	}
+
+	//todo
+	return false;
 }
 
 bool Visual::ProcessTouchMove(const Touch& touch) {
 	if (!IsTouchable()) {
 		return false;
 	}
+
+	//todo
+	return false;
 }
 
 bool Visual::ProcessTouchEnd(const Touch& touch) {
 	if (!IsTouchable()) {
 		return false;
 	}
+
+	//todo
+	return false;
 }
 
 uint32 Visual::GetId() const {

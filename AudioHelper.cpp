@@ -7,15 +7,15 @@
 
 #include "Error.hpp"
 
-AudioHelper::Effect::Effect(const std::string& fileEffect)
+AudioHelper::Effect::Effect(const std::string& name)
 	: m_hash(0)
 	, m_data(NULL)
 	, m_specification(NULL) {
-	m_hash = IwHashString(fileEffect.c_str());
+	m_hash = IwHashString(name.c_str());
 
-	m_data = CIwSoundWAV::Create(fileEffect.c_str());
+	m_data = CIwSoundWAV::Create(name.c_str());
 	if (m_data == NULL) {
-		throw Error("Fail to load sound effect: %s", fileEffect.c_str());
+		throw Error("Fail to load sound effect: %s", name.c_str());
 	}
 
 	try {
@@ -53,9 +53,9 @@ void AudioHelper::Update(float delta) {
 	IwGetSoundManager()->Update();
 }
 
-void AudioHelper::PlayMusic(const std::string& fileMusic, bool repeat) {
+void AudioHelper::PlayMusic(const std::string& name, bool repeat) {
 	if (s3eAudioIsCodecSupported(S3E_AUDIO_CODEC_MP3)) {
-		s3eAudioPlay(fileMusic.c_str(), repeat ? 0 : 1);
+		s3eAudioPlay(name.c_str(), repeat ? 0 : 1);
 	} else {
 		throw Error("Mp3 codec is not supported");
 	}
@@ -65,12 +65,12 @@ void AudioHelper::StopMusic() {
 	s3eAudioStop();
 }
 
-void AudioHelper::PlayEffect(const std::string& fileEffect) {
+void AudioHelper::PlayEffect(const std::string& name) {
 	Effect* effect = NULL;
 	EffectList::iterator found = std::find_if(m_effects.begin(), m_effects.end(),
-		FindEffect(IwHashString(fileEffect.c_str())));
+		FindEffect(IwHashString(name.c_str())));
 	if (found == m_effects.end()) {
-		effect = new Effect(fileEffect);
+		effect = new Effect(name);
 		m_effects.push_back(effect);
 	} else {
 		effect = *found;

@@ -28,6 +28,16 @@ public:
 	virtual IVisual* GetVisual(uint32 number);
 	virtual IVisual* GetVisualById(uint32 id);
 
+	template <typename T>
+	T* Visual(uint32 number) {
+		return static_cast<T*>(GetVisual(number));
+	}
+
+	template <typename T>
+	T* VisualById(uint32 id) {
+		return static_cast<T*>(GetVisualById(id));
+	}
+
 private:
 	struct VisualInfo {
 		IVisual* visual;
@@ -85,9 +95,7 @@ private:
 	class RenderVisual : public std::unary_function<VisualInfo*, void> {
 	public:
 		void operator()(VisualInfo* info) const {
-			if (info->visual->IsVisible()) {
-				info->visual->Render();
-			}
+			info->visual->Render();
 		}
 	};
 
@@ -121,11 +129,6 @@ private:
 		}
 
 		bool operator()(VisualInfo* info) const {
-			if (!info->visual->IsTouchable() ||
-				!info->visual->HitTest(m_touch.point)) {
-				return false;
-			}
-
 			switch (m_event) {
 			case TouchEvent::Begin:
 				return info->visual->ProcessTouchBegin(m_touch);

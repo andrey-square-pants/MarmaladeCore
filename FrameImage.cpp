@@ -2,36 +2,36 @@
 
 #include "Error.hpp"
 
-FrameImage::FrameImage(const std::string& fileImage, uint8 frameCount)
-	: Image(fileImage)
+FrameImage::FrameImage(const std::string& name, uint8 count)
+	: Image(name)
 	, m_currentFrame(0) {
-		Construct(frameCount);
+	Construct(count);
 }
 
-FrameImage::FrameImage(uint32 id, const std::string& fileImage, uint8 frameCount)
-	: Image(id, fileImage)
+FrameImage::FrameImage(uint32 id, const std::string& name, uint8 count)
+	: Image(id, name)
 	, m_currentFrame(0) {
-		Construct(frameCount);
+	Construct(count);
 }
 
 FrameImage::~FrameImage() {
 	Destruct();
 }
 
-void FrameImage::Construct(uint8 frameCount) {
+void FrameImage::Construct(uint8 count) {
 	m_sprite.SetAnimRepeat(0);
 	m_sprite.SetAnimDuration(0.0f);
 
 	CIw2DImage* image = m_sprite.GetImage();
-	if (frameCount == 0) {
+	if (count == 0) {
 		delete image;
 		throw Error("Frame count should be > 0");
 	}
 
-	int width = static_cast<int>(image->GetWidth())/frameCount;
+	int width = static_cast<int>(image->GetWidth())/count;
 	int height = static_cast<int>(image->GetHeight());
 
-	m_sprite.SetAtlas(new CAtlas(width, height, frameCount, image));
+	m_sprite.SetAtlas(new CAtlas(width, height, count, image));
 
 	m_sprite.m_W = static_cast<float>(width);
 	m_sprite.m_H = static_cast<float>(height);
