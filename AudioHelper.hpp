@@ -1,5 +1,5 @@
-#ifndef AUDIOMANAGER_HPP
-#define AUDIOMANAGER_HPP
+#ifndef AUDIOHELPER_HPP
+#define AUDIOHELPER_HPP
 
 #include <list>
 #include <string>
@@ -9,33 +9,22 @@
 
 #include "Core.hpp"
 
-class IAudio {
+class AudioHelper : public IAudioPlayer, public IUpdateable {
 public:
-	virtual ~IAudio() {
-	}
-
-	virtual void PlayEffect(const std::string& file) = 0;
-
-	virtual void PlayMusic(const std::string& file, bool repeat) = 0;
-	virtual void StopMusic() = 0;
-};
-
-class AudioManager : public IAudio, public IUpdateable {
-public:
-	AudioManager();
-	virtual ~AudioManager();
+	AudioHelper();
+	virtual ~AudioHelper();
 
 	virtual void Update(float delta);
 
-	virtual void PlayEffect(const std::string& file);
+	virtual void PlayEffect(const std::string& fileEffect);
 
-	virtual void PlayMusic(const std::string& file, bool repeat);
+	virtual void PlayMusic(const std::string& fileMusic, bool repeat);
 	virtual void StopMusic();
 
 private:
 	class Effect {
 	public:
-		Effect(const std::string& file);
+		Effect(const std::string& fileEffect);
 		virtual ~Effect();
 
 		void Play();
@@ -75,7 +64,7 @@ private:
 private:
 	EffectList m_effects;
 
-	DISABLE_COPY(AudioManager);
+	DISABLE_COPY(AudioHelper);
 };
 
 #endif

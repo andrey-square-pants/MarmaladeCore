@@ -2,45 +2,59 @@
 
 #include "Error.hpp"
 
-FrameImage::FrameImage(const std::string& file, uint8 count)
-	: Image(file)
-	, m_frame(0) {
+FrameImage::FrameImage(const std::string& fileImage, uint8 frameCount)
+	: Image(fileImage)
+	, m_currentFrame(0) {
+		Construct(frameCount);
+}
+
+FrameImage::FrameImage(uint32 id, const std::string& fileImage, uint8 frameCount)
+	: Image(id, fileImage)
+	, m_currentFrame(0) {
+		Construct(frameCount);
+}
+
+FrameImage::~FrameImage() {
+	Destruct();
+}
+
+void FrameImage::Construct(uint8 frameCount) {
 	m_sprite.SetAnimRepeat(0);
 	m_sprite.SetAnimDuration(0.0f);
 
 	CIw2DImage* image = m_sprite.GetImage();
-	if (count == 0) {
+	if (frameCount == 0) {
 		delete image;
 		throw Error("Frame count should be > 0");
 	}
 
-	int width = static_cast<int>(image->GetWidth())/count;
+	int width = static_cast<int>(image->GetWidth())/frameCount;
 	int height = static_cast<int>(image->GetHeight());
 
-	m_sprite.SetAtlas(new CAtlas(width, height, count, image));
+	m_sprite.SetAtlas(new CAtlas(width, height, frameCount, image));
 
 	m_sprite.m_W = static_cast<float>(width);
 	m_sprite.m_H = static_cast<float>(height);
 }
 
-FrameImage::~FrameImage() {
+void FrameImage::Destruct() {
 	delete m_sprite.GetAtlas();
 }
 
-uint8 FrameImage::GetCount() const {
+uint8 FrameImage::GetFrameCount() const {
 	CSprite& sprite = const_cast<CSprite&>(m_sprite);
 	return static_cast<uint8>(sprite.GetAtlas()->GetNumFrames());
 }
 
-uint8 FrameImage::GetFrame() const {
-	return m_frame;
+uint8 FrameImage::GetCurrentFrame() const {
+	return m_currentFrame;
 }
 
-void FrameImage::SetFrame(uint8 frame) {
-	if (frame >= GetCount()) {
-		throw Error("Frame out of bounds: %d", frame);
+void FrameImage::SetCurrentFrame(uint8 number) {
+	if (number >= GetFrameCount()) {
+		throw Error("Frame number out of bounds: %u", number);
 	}
-	m_frame = frame;
+	m_currentFrame = number;
 }
 
 void FrameImage::Render() {
@@ -50,7 +64,7 @@ void FrameImage::Render() {
 
 	m_sprite.PreRender();
 
-	const CIwRect& region = m_sprite.GetAtlas()->GetFrame(m_frame);
+	const CIwRect& region = m_sprite.GetAtlas()->GetFrame(m_currentFrame);
 	Iw2DDrawImageRegion(m_sprite.GetImage(), CIwFVec2(0, 0),
 		CIwFVec2(region.x, region.y), CIwFVec2(region.w, region.h));
 

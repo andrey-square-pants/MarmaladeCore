@@ -2,21 +2,34 @@
 
 #include "Error.hpp"
 
-CIw2DFont* Label::LoadFont(const std::string& file) {
-	CIw2DFont* font = Iw2DCreateFont(file.c_str());
+CIw2DFont* Label::LoadFont(const std::string& fileFont) {
+	CIw2DFont* font = Iw2DCreateFont(fileFont.c_str());
 	if (font == NULL) {
-		throw Error("Fail to load font: %s", file.c_str());
+		throw Error("Fail to load font: %s", fileFont.c_str());
 	}
 	return font;
 }
 
-Label::Label(const std::string& file)
+Label::Label(const std::string& fileFont)
 	: Visual(m_label) {
-	m_label.SetFont(LoadFont(file));
-	m_label.m_H = static_cast<float>(m_label.m_Font->GetHeight());
+	Construct(fileFont);
+}
+
+Label::Label(uint32 id, const std::string& fileFont)
+	: Visual(id, m_label) {
+	Construct(fileFont);
 }
 
 Label::~Label() {
+	Destruct();
+}
+
+void Label::Construct(const std::string& fileFont) {
+	m_label.SetFont(LoadFont(fileFont));
+	m_label.m_H = static_cast<float>(m_label.m_Font->GetHeight());
+}
+
+void Label::Destruct() {
 	delete m_label.m_Font;
 }
 

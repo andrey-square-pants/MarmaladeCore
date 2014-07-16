@@ -1,6 +1,9 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
+#include <string>
+
+#include "s3eTypes.h"
 #include "Iw2DSceneGraph.h"
 using namespace Iw2DSceneGraph;
 
@@ -40,6 +43,37 @@ inline CIwVec2 both(int32 value) {
 	return CIwVec2(value, value);
 }
 
+struct Touch {
+	uint32 id;
+	CIwVec2 point;
+
+	Touch(uint32 id_, const CIwVec2& point_)
+		: id(id_)
+		, point(point_) {
+	}
+};
+
+class ITouchProcessor {
+public:
+	virtual ~ITouchProcessor() {
+	}
+
+	virtual bool ProcessTouchBegin(const Touch& touch) = 0;
+	virtual bool ProcessTouchMove(const Touch& touch) = 0;
+	virtual bool ProcessTouchEnd(const Touch& touch) = 0;
+};
+
+class IAudioPlayer {
+public:
+	virtual ~IAudioPlayer() {
+	}
+
+	virtual void PlayEffect(const std::string& fileEffet) = 0;
+
+	virtual void PlayMusic(const std::string& fileMusic, bool repeat) = 0;
+	virtual void StopMusic() = 0;
+};
+
 class IRenderable {
 public:
 	virtual ~IRenderable() {
@@ -54,6 +88,94 @@ public:
 	}
 
 	virtual void Update(float delta) = 0;
+};
+
+class IVisual : public IRenderable, public IUpdateable,
+	public ITouchProcessor {
+public:
+	virtual ~IVisual() {
+	}
+
+	virtual uint32 GetId() const = 0;
+
+	virtual float GetX() const = 0;
+	virtual void SetX(float x) = 0;
+
+	virtual float GetY() const = 0;
+	virtual void SetY(float y) = 0;
+
+	virtual CIwFVec2 GetPosition() const = 0;
+	virtual void SetPosition(const CIwFVec2& position) = 0;
+
+	virtual float GetWidth() const = 0;
+	virtual float GetHeight() const = 0;
+	virtual CIwFVec2 GetSize() const = 0;
+
+	virtual float GetOriginX() const = 0;
+	virtual void SetOriginX(float originX) = 0;
+
+	virtual float GetOriginY() const = 0;
+	virtual void SetOriginY(float originY) = 0;
+
+	virtual CIwFVec2 GetOrigin() const = 0;
+	virtual void SetOrigin(const CIwFVec2& origin) = 0;
+
+	virtual float GetScaleX() const = 0;
+	virtual void SetScaleX(float scaleX) = 0;
+
+	virtual float GetScaleY() const = 0;
+	virtual void SetScaleY(float scaleY) = 0;
+
+	virtual CIwFVec2 GetScale() const = 0;
+	virtual void SetScale(const CIwFVec2& scale) = 0;
+
+	virtual float GetAngle() const = 0;
+	virtual void SetAngle(float angle) = 0;
+
+	virtual CColor GetColor() const = 0;
+	virtual void SetColor(const CColor& color) = 0;
+
+	virtual float GetAlpha() const = 0;
+	virtual void SetAlpha(float alpha) = 0;
+
+	virtual bool IsVisible() const = 0;
+	virtual void SetVisible(bool visible) = 0;
+
+	virtual bool IsTouchable() const = 0;
+	virtual void SetTouchable(bool touchable) = 0;
+
+	virtual CColor GetDebugColor() const = 0;
+	virtual void SetDebugColor(const CColor& color) = 0;
+
+	virtual bool IsDebug() const = 0;
+	virtual void SetDebug(bool debug) = 0;
+
+	virtual bool HitTest(const CIwVec2& point) const = 0;
+};
+
+class IScene : public IRenderable, public IUpdateable,
+	public ITouchProcessor {
+public:
+	virtual ~IScene() {
+	}
+
+	virtual void AddVisual(IVisual* visual, bool takeOwnership) = 0;
+
+	virtual void RemoveVisual(IVisual* visual) = 0;
+	virtual void RemoveVisualById(uint32 id) = 0;
+
+	virtual uint32 GetVisualCount() const = 0;
+
+	virtual IVisual* GetVisual(uint32 i) = 0;
+	virtual IVisual* GetVisualById(uint32 id) = 0;
+};
+
+class ISceneManager {
+public:
+	virtual ~ISceneManager() {
+	}
+
+	virtual void SwitchToScene(IScene* scene, bool takeOwnership) = 0;
 };
 
 #endif

@@ -3,27 +3,33 @@
 
 #include "Core.hpp"
 #include "GameRunner.hpp"
-#include "TouchManager.hpp"
-#include "AudioManager.hpp"
+#include "AudioHelper.hpp"
+#include "TouchHelper.hpp"
+#include "SceneHelper.hpp"
 
 class Game : public IRenderable, public IUpdateable,
-	public ITouchListener, public IAudio {
+	public ITouchProcessor, public IAudioPlayer, public ISceneManager {
 protected:
 	Game();
-	virtual ~Game() = 0;
+	virtual ~Game();
+
+	virtual void Create() = 0;
+	virtual void Destroy() = 0;
 
 public:
 	virtual void Render();
 	virtual void Update(float delta);
 
-	virtual void OnTouchBegin(const Touch& touch);
-	virtual void OnTouchMove(const Touch& touch);
-	virtual void OnTouchEnd(const Touch& touch);
+	virtual bool ProcessTouchBegin(const Touch& touch);
+	virtual bool ProcessTouchMove(const Touch& touch);
+	virtual bool ProcessTouchEnd(const Touch& touch);
 
 	virtual void PlayEffect(const std::string& file);
 
 	virtual void PlayMusic(const std::string& file, bool repeat);
 	virtual void StopMusic();
+
+	virtual void SwitchToScene(IScene* scene, bool takeOwnership);
 
 	float GetScreenWidth() const;
 	float GetScreenHeight() const;
@@ -36,27 +42,29 @@ private:
 	void Run();
 
 private:
-	TouchManager m_touchManager;
-	AudioManager m_audioManager;
+	AudioHelper m_audioHelper;
+	TouchHelper m_touchHelper;
+	SceneHelper m_sceneHelper;
 
 	DISABLE_COPY(Game);
 
 	friend class GameRunner;
 };
 
-#define DECLARE_GAME(ClassName)                      \
-protected:                                           \
-    ClassName();                                     \
-    virtual ~ClassName();                            \
-                                                     \
-    DISABLE_COPY(ClassName);                         \
-                                                     \
+#define DECLARE_GAME(ClassName) \
+protected:                      \
+    ClassName();                \
+    virtual ~ClassName();       \
+                                \
+    DISABLE_COPY(ClassName);    \
+                                \
     friend class GameHolder<ClassName>
 
-#define CONSTRUCT_GAME(ClassName) \
-    ClassName::ClassName()
-
-#define DESTRUCT_GAME(ClassName) \
-    ClassName::~ClassName()
+#define IMPLEMENT_GAME(ClassName) \
+    ClassName::ClassName() {      \
+    }                             \
+                                  \
+    ClassName::~ClassName() {     \
+    }
 
 #endif

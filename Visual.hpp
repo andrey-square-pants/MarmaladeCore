@@ -2,72 +2,11 @@
 #define VISUAL_HPP
 
 #include "Core.hpp"
-#include "TouchManager.hpp"
-
-class IVisual : public IRenderable, public IUpdateable,
-	public ITouchListener {
-public:
-	virtual ~IVisual() {
-	}
-
-	virtual float GetX() const = 0;
-	virtual void SetX(float x) = 0;
-
-	virtual float GetY() const = 0;
-	virtual void SetY(float y) = 0;
-
-	virtual CIwFVec2 GetPosition() const = 0;
-	virtual void SetPosition(const CIwFVec2& position) = 0;
-
-	virtual float GetWidth() const = 0;
-	virtual float GetHeight() const = 0;
-	virtual CIwFVec2 GetSize() const = 0;
-
-	virtual float GetOriginX() const = 0;
-	virtual void SetOriginX(float originX) = 0;
-
-	virtual float GetOriginY() const = 0;
-	virtual void SetOriginY(float originY) = 0;
-
-	virtual CIwFVec2 GetOrigin() const = 0;
-	virtual void SetOrigin(const CIwFVec2& origin) = 0;
-
-	virtual float GetScaleX() const = 0;
-	virtual void SetScaleX(float scaleX) = 0;
-
-	virtual float GetScaleY() const = 0;
-	virtual void SetScaleY(float scaleY) = 0;
-
-	virtual CIwFVec2 GetScale() const = 0;
-	virtual void SetScale(const CIwFVec2& scale) = 0;
-
-	virtual float GetAngle() const = 0;
-	virtual void SetAngle(float angle) = 0;
-
-	virtual CColor GetColor() const = 0;
-	virtual void SetColor(const CColor& color) = 0;
-
-	virtual float GetAlpha() const = 0;
-	virtual void SetAlpha(float alpha) = 0;
-
-	virtual bool IsVisible() const = 0;
-	virtual void SetVisible(bool visible) = 0;
-
-	virtual bool IsTouchable() const = 0;
-	virtual void SetTouchable(bool touchable) = 0;
-
-	virtual CColor GetDebugColor() const = 0;
-	virtual void SetDebugColor(const CColor& color) = 0;
-
-	virtual bool IsDebug() const = 0;
-	virtual void SetDebug(bool debug) = 0;
-
-	virtual bool HitTest(const CIwVec2& point) = 0;
-};
 
 class Visual : public IVisual {
 protected:
 	Visual(CDrawable& visual);
+	Visual(uint32 id, CDrawable& visual);
 
 public:
 	virtual ~Visual();
@@ -75,9 +14,11 @@ public:
 	virtual void Render();
 	virtual void Update(float delta);
 
-	virtual void OnTouchBegin(const Touch& touch);
-	virtual void OnTouchMove(const Touch& touch);
-	virtual void OnTouchEnd(const Touch& touch);
+	virtual bool ProcessTouchBegin(const Touch& touch);
+	virtual bool ProcessTouchMove(const Touch& touch);
+	virtual bool ProcessTouchEnd(const Touch& touch);
+
+	virtual uint32 GetId() const;
 
 	virtual float GetX() const;
 	virtual void SetX(float x);
@@ -131,11 +72,14 @@ public:
 	virtual bool IsDebug() const;
 	virtual void SetDebug(bool debug);
 
-	virtual bool HitTest(const CIwVec2& point);
+	virtual bool HitTest(const CIwVec2& point) const;
 
 private:
+	uint32 m_id;
 	bool m_touchable;
-	CDrawable& m_visual;
+	mutable CDrawable& m_visual;
+
+	DISABLE_COPY(Visual);
 };
 
 #endif

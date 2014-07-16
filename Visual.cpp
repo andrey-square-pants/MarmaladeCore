@@ -1,7 +1,14 @@
 #include "Visual.hpp"
 
 Visual::Visual(CDrawable& visual)
-	: m_touchable(false)
+	: m_id(0)
+	, m_touchable(false)
+	, m_visual(visual) {
+}
+
+Visual::Visual(uint32 id, CDrawable& visual)
+	: m_id(id)
+	, m_touchable(false)
 	, m_visual(visual) {
 }
 
@@ -9,22 +16,36 @@ Visual::~Visual() {
 }
 
 void Visual::Render() {
-	if (IsVisible()) {
-		m_visual.Render();
+	if (!IsVisible()) {
+		return;
 	}
+	m_visual.Render();
 }
 
 void Visual::Update(float delta) {
 	m_visual.Update(delta, 1.0f);
 }
 
-void Visual::OnTouchBegin(const Touch& touch) {
+bool Visual::ProcessTouchBegin(const Touch& touch) {
+	if (!IsTouchable()) {
+		return false;
+	}
 }
 
-void Visual::OnTouchMove(const Touch& touch) {
+bool Visual::ProcessTouchMove(const Touch& touch) {
+	if (!IsTouchable()) {
+		return false;
+	}
 }
 
-void Visual::OnTouchEnd(const Touch& touch) {
+bool Visual::ProcessTouchEnd(const Touch& touch) {
+	if (!IsTouchable()) {
+		return false;
+	}
+}
+
+uint32 Visual::GetId() const {
+	return m_id;
 }
 
 float Visual::GetX() const {
@@ -170,6 +191,6 @@ void Visual::SetDebug(bool debug) {
 	m_visual.m_DebugDraw = debug;
 }
 
-bool Visual::HitTest(const CIwVec2& point) {
+bool Visual::HitTest(const CIwVec2& point) const {
 	return m_visual.HitTest(point.x, point.y);
 }

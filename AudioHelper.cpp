@@ -1,4 +1,4 @@
-#include "AudioManager.hpp"
+#include "AudioHelper.hpp"
 
 #include <algorithm>
 
@@ -7,15 +7,15 @@
 
 #include "Error.hpp"
 
-AudioManager::Effect::Effect(const std::string& file)
+AudioHelper::Effect::Effect(const std::string& fileEffect)
 	: m_hash(0)
 	, m_data(NULL)
 	, m_specification(NULL) {
-	m_hash = IwHashString(file.c_str());
+	m_hash = IwHashString(fileEffect.c_str());
 
-	m_data = CIwSoundWAV::Create(file.c_str());
+	m_data = CIwSoundWAV::Create(fileEffect.c_str());
 	if (m_data == NULL) {
-		throw Error("Fail to load sound effect: %s", file.c_str());
+		throw Error("Fail to load sound effect: %s", fileEffect.c_str());
 	}
 
 	try {
@@ -27,50 +27,50 @@ AudioManager::Effect::Effect(const std::string& file)
 	m_specification->SetData(m_data);
 }
 
-AudioManager::Effect::~Effect() {
+AudioHelper::Effect::~Effect() {
 	delete m_specification;
 	delete m_data;
 }
 
-void AudioManager::Effect::Play() {
+void AudioHelper::Effect::Play() {
 	m_specification->Play();
 }
 
-uint32 AudioManager::Effect::GetHash() const {
+uint32 AudioHelper::Effect::GetHash() const {
 	return m_hash;
 }
 
-AudioManager::AudioManager() {
+AudioHelper::AudioHelper() {
 	IwSoundInit();
 }
 
-AudioManager::~AudioManager() {
+AudioHelper::~AudioHelper() {
 	std::for_each(m_effects.begin(), m_effects.end(), ClearEffect());
 	IwSoundTerminate();
 }
 
-void AudioManager::Update(float delta) {
+void AudioHelper::Update(float delta) {
 	IwGetSoundManager()->Update();
 }
 
-void AudioManager::PlayMusic(const std::string& file, bool repeat) {
+void AudioHelper::PlayMusic(const std::string& fileMusic, bool repeat) {
 	if (s3eAudioIsCodecSupported(S3E_AUDIO_CODEC_MP3)) {
-		s3eAudioPlay(file.c_str(), repeat ? 0 : 1);
+		s3eAudioPlay(fileMusic.c_str(), repeat ? 0 : 1);
 	} else {
 		throw Error("Mp3 codec is not supported");
 	}
 }
 
-void AudioManager::StopMusic() {
+void AudioHelper::StopMusic() {
 	s3eAudioStop();
 }
 
-void AudioManager::PlayEffect(const std::string& file) {
+void AudioHelper::PlayEffect(const std::string& fileEffect) {
 	Effect* effect = NULL;
 	EffectList::iterator found = std::find_if(m_effects.begin(), m_effects.end(),
-		FindEffect(IwHashString(file.c_str())));
+		FindEffect(IwHashString(fileEffect.c_str())));
 	if (found == m_effects.end()) {
-		effect = new Effect(file);
+		effect = new Effect(fileEffect);
 		m_effects.push_back(effect);
 	} else {
 		effect = *found;

@@ -3,14 +3,12 @@
 #include <cstdio>
 #include <cstring>
 
-#include "s3eTypes.h"
-
 Error::Error(const char* format, ...) {
 	if (format == NULL) {
 		return;
 	}
 
-	static const uint32 MessageSize = 1024;
+	static const int MessageSize = 1024;
 
 	char message[MessageSize];
 	memset(message, 0, MessageSize);

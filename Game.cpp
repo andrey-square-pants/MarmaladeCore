@@ -4,11 +4,11 @@
 #include "IwGx.h"
 
 Game::Game() {
-	m_touchManager.AddListener(*this);
+	m_touchHelper.SetTouchProcessor(this);
 }
 
 Game::~Game() {
-	m_touchManager.RemoveListener(*this);
+	m_touchHelper.SetTouchProcessor(NULL);
 }
 
 void Game::Run() {
@@ -32,33 +32,43 @@ void Game::Run() {
 }
 
 void Game::Update(float delta) {
-	m_touchManager.Update(delta);
-	m_audioManager.Update(delta);
+	m_audioHelper.Update(delta);
+	m_touchHelper.Update(delta);
+	m_sceneHelper.Update(delta);
 }
 
 void Game::Render() {
 	Iw2DSurfaceClear(0xff000000);
+
+	m_sceneHelper.Render();
 }
 
-void Game::OnTouchBegin(const Touch& touch) {
+bool Game::ProcessTouchBegin(const Touch& touch) {
+	return m_sceneHelper.ProcessTouchBegin(touch);
 }
 
-void Game::OnTouchMove(const Touch& touch) {
+bool Game::ProcessTouchMove(const Touch& touch) {
+	return m_sceneHelper.ProcessTouchMove(touch);
 }
 
-void Game::OnTouchEnd(const Touch& touch) {
+bool Game::ProcessTouchEnd(const Touch& touch) {
+	return m_sceneHelper.ProcessTouchEnd(touch);
 }
 
 void Game::PlayEffect(const std::string& file) {
-	m_audioManager.PlayEffect(file);
+	m_audioHelper.PlayEffect(file);
 }
 
 void Game::PlayMusic(const std::string& file, bool repeat) {
-	m_audioManager.PlayMusic(file, repeat);
+	m_audioHelper.PlayMusic(file, repeat);
 }
 
 void Game::StopMusic() {
-	m_audioManager.StopMusic();
+	m_audioHelper.StopMusic();
+}
+
+void Game::SwitchToScene(IScene* scene, bool takeOwnership) {
+	m_sceneHelper.SwitchToScene(scene, takeOwnership);
 }
 
 float Game::GetScreenWidth() const {

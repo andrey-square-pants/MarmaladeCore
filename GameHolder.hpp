@@ -19,9 +19,11 @@ public:
 private:
 	static void CreateInstance() {
 		instance = new T();
+		instance->Create();
 	}
 
 	static void DestroyInstance() {
+		instance->Destroy();
 		delete instance;
 		instance = NULL;
 	}
